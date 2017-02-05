@@ -32,9 +32,54 @@ function setBoardCell(board, letter, row, col){
 
 }
 
-function algebraicToRowCol(algebraiNotation){
+function algebraicToRowCol(algebraicNotation){
 
 }
+
+function placeLetter(board, letter, algebraicNotation){
+
+}
+
+function placeLetters(board, letter, algebraicNotation){
+
+}
+
+function boardToString(board){
+
+}
+
+function isBoardFull(board){
+
+}
+
+function flip(board, row, col){
+
+}
+
+function flipCells(board, cellsToFlip){
+
+}
+
+function getCellsToFlip(board, lastRow, lastCol){
+
+}
+
+function isValidMove(board, letter, row, col){
+
+}
+
+function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
+
+}
+
+function getLetterCounts(board){
+
+}
+
+function getValidMoves(board, letter){
+
+}
+
 
 module.exports = {
   repeat: repeat,
@@ -43,5 +88,15 @@ module.exports = {
   indexToRowCol: indexToRowCol,
   setBoardCell: setBoardCell,
   algebraicToRowCol: algebraicToRowCol,
-  
+  placeLetter: placeLetter,
+  placeLetters: placeLetters,
+  boardToString: boardToString,
+  isBoardFull: isBoardFull,
+  flip: flip,
+  flipCells: flipCells,
+  getCellsToFlip: getCellsToFlip,
+  isValidMove: isValidMove,
+  isValidMoveAlgebraicNotation: isValidMoveAlgebraicNotation,
+  getLetterCounts: getLetterCounts,
+  getValidMoves: getValidMoves,
 }
