@@ -8,7 +8,7 @@ function repeat(value, n){
   return arr;
 }
 
-function generateBoard(rows, columns, initialCellValue = "num"){
+function generateBoard(rows, columns, initialCellValue = " "){
   const num = rows * columns;
   let arr = [initialCellValue];
   for(let i = 0; i < num - 1; i++){
@@ -25,11 +25,27 @@ function rowColToIndex(board, rowNumber, columnNumber){
 }
 
 function indexToRowCol(board ,i){
-
+  let rows, columns;
+  newIndex = i+1;
+  // if(i === 0){
+  //   const info = {row: 0 ,col: 0};
+  //   return info;
+  // }
+  const boardLength = Math.sqrt(board.length);
+  rows = Math.ceil(i/(boardLength))-1;
+  if(rows>0){
+    columns = (newIndex - boardLength*rows)-1;
+  }else columns = i;
+  //columns = (newIndex - (boardLength*Math.floor(newIndex/(boardLength))))-1;
+  const info = {row: rows ,col: columns};
+  return info;
 }
 
 function setBoardCell(board, letter, row, col){
-
+  let index = rowColToIndex(board,row,col);
+  board[index] = letter;
+  //console.log(board);
+  return board;
 }
 
 function algebraicToRowCol(algebraicNotation){

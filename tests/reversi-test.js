@@ -1,7 +1,7 @@
 /* eslint no-unused-expressions: "off" */
 
 const chai = require('chai');
-const expect = chai.expect; 
+const expect = chai.expect;
 const rev = require('../src/reversi.js');
 
 describe('reversi', function() {
@@ -49,8 +49,8 @@ describe('reversi', function() {
         it('sets the cell to the letter specified by row and col', function() {
             const board = rev.generateBoard(3, 3, " ");
             const b1 = rev.setBoardCell(board, "X", 1, 1);
-            const b2 = rev.setBoardCell(b1, "O", 0, 2);
             expect(b1).to.deep.equal([" ", " ", " ", " ", "X", " ", " ", " ", " "]);
+            const b2 = rev.setBoardCell(b1, "O", 0, 2);
             expect(b2).to.deep.equal([" ", " ", "O", " ", "X", " ", " ", " ", " "]);
         });
     });
@@ -297,7 +297,7 @@ describe('reversi', function() {
             board = rev.placeLetters(board, 'X', 'A3', 'D1', 'D3');
             const res = rev.getCellsToFlip(board, 0, 3);
             // since we don't know what order these groups will be in...
-            // we'll just make sure that each inner array is either 1 or 2 
+            // we'll just make sure that each inner array is either 1 or 2
             // elements long, and then test for membership
             res.forEach((line) => {
                 expect(line).to.have.length.within(1, 2);
