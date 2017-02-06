@@ -3,8 +3,11 @@ const rev = require("./reversi.js");
 
 let makeBoard = rev.generateBoard;
 board = makeBoard(3,3);
-let setCell = rev.setBoardCell;
-let b1 = setCell(board,"X", 1 ,1 );
-console.log(b1);
-let b2 = setCell(b1, "O",0 ,2 );
-console.log(b2);
+// let setCell = rev.setBoardCell;
+// setCell(board, "X", 1,1);
+// let notation = rev.algebraicToRowCol;
+// let arrayOfCharacters = notation("A2 ");
+// //console.log(arrayOfCharacters);
+let placeLetter = rev.placeLetter;
+placeLetter(board, "X","B2");
+console.log(board);
