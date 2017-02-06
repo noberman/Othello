@@ -117,19 +117,56 @@ function boardToString(board){
   let numberToLetter = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F',
    6:'G', 7:'H', 8:'I', 9:'J', 10:'K', 11:'L', 12:'M', 13:'N', 14:'O', 15:'P',
    16:'Q', 17:'R', 18:'S', 20:'T', 21:'U', 22:'V', 23:'X', 24:'Y', 25:'Z'};
-  for(let i=1; i<=2*(boardLength+1); i++){
+   let line = "";
+  for(let i=0; i<=2*(boardLength+1); i++){
     for(let j = 0; j<boardLength+1; j++){
-      if(i===1){
-        for(let k=0; k<boardLength;k++){
-          console.log(" "+numberToLetter[k]+"   ");
+      // if(i===1){
+      //   //writing the first line A  B  C  D
+      //   if(j<boardLength){
+      //     line += ("  "+numberToLetter[j]+"   ");
+      //   }else{
+      //     line+= "  " + numberToLetter[j]+"   \n";
+      //     break;
+      //   }
+      // // for every odd number row it will print out the +---+---+---+ lines
+      // }else
+      if((i%2)===0){
+        if(i===0){
+          if(j===0){
+            line+= "   ";
+          }else if(j===boardLength){
+            line += "  " + String.fromCharCode(65+j-1) + "  ";
+          }else {
+            line += "  "+ String.fromCharCode(65+j-1)+ "  ";
+          }
+        }else {
+          if(j===0){
+            line += Math.floor(i/2)+ "  |";
+          }else {
+            const index = rowColToIndex(board, Math.floor(i/2)-1, j-1);
+            const cell = board[index];
+            if(cell!== " "){
+              line+= " "+ cell+ " |";
+            }else{
+              line+= "   |";
+            }
+          }
         }
-      }
-      if(i/2===0){
+      }else{
+        if(j===0){
+          line+= "   +";
+        }else{
+          line+= "---+";
+        }
 
       }
     }
+    line+= "\n";
   }
+  console.log(line);
+  return line;
 }
+
 
 function isBoardFull(board){
   for(let i =0; i<board.length; i++){
@@ -149,7 +186,30 @@ function flip(board, row, col){
 }
 
 function flipCells(board, cellsToFlip){
+  let info = arguments[1];
+  let arrRows = info[0];
+  let arrColumns = info[1];
+  console.log(info);
+  console.log(arrRows);
+  console.log(arrColumns);
+  // console.log(arrRows.length);
+  // console.log(arrColumns.length);
+  if(Array.isArray(info[0][0])){
+    for(let i =0; i< arrRows.length; i++){
+      flip(board, arrRows[i][0], arrRows[i][1]);
+    }
+  }else{
+    flip(board,arrRows[0], arrRows[1]);
+  }
+  if(Array.isArray(info[1][0])){
+    for(let i =0; i< arrColumns.length; i++){
+      flip(board, arrColumns[i][0], arrColumns[i][1]);
+    }
+  }else {
+    flip(board,arrColumns[0], arrColumns[1]);
+  }
 
+  return board;
 }
 
 function getCellsToFlip(board, lastRow, lastCol){

@@ -164,6 +164,9 @@ describe('reversi', function() {
             board = rev.generateBoard(4, 4, " ");
             board = rev.placeLetters(board, 'X', "A1", "B1", "B2");
             board = rev.flipCells(board, [[[0, 0], [0, 1]], [[1, 1]]]);
+            console.log(board[0]);
+            console.log(board[1]);
+            console.log(board[5]);
             expect(board[0]).to.equal('O');
             expect(board[1]).to.equal('O');
             expect(board[5]).to.equal('O');
