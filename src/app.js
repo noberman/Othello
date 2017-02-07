@@ -11,48 +11,21 @@ let stringBoard = rev.boardString;
 // let arrayOfCharacters = notation("A2 ");
 // //console.log(arrayOfCharacters);
 let placeLetter = rev.placeLetter;
+let placeLetters = rev.placeLetters;
 let boardString = rev.boardToString;
+let getCellsToFlip = rev.getCellsToFlip;
 //placeLetter(board, "X", "B2");
-placeLetter(board,"X","B1");
-placeLetter(board,"X","A1");
-placeLetter(board, "X", "B2");
+// placeLetter(board,"X","D1");
+// placeLetter(board,"X","A4");
+// placeLetter(board,"O","D2");
+// placeLetter(board,"O","D3");
+// placeLetter(board,"O","B4");
+// placeLetter(board,"O","C4");
+// placeLetter(board, "X", "D4");
+placeLetters(board, 'O', 'B3', 'C3', 'D2');
+rev.placeLetters(board, 'X', 'A3', 'D1', 'D3');
+//last move: C3 is [2,2]
 //board = flipCells(board, [[[0,1],[0,0]],[1,1]]);
-let string = boardString(board);
-console.log(string);
-console.log(board);
-//console.log(board);
-
-
-// function boardToString(board){
-// 	let img = "";
-// 	const len = Math.sqrt(board.length);
-// 	const row = 2*(len+1);
-// 	for(let i=0;i<row;i++){
-// 		for(let j=0;j<len+1;j++){
-// 			if(i%2===0){
-// 				if(i===0) {
-// 					if(j===0){
-// 						img+="   ";
-// 					}else if(j===len){
-// 						img+=("  "+String.fromCharCode(65+j-1)+" ");
-// 					}else{
-// 						img+=("  "+String.fromCharCode(65+j-1)+" ");
-// 					}
-// 				}else{
-// 					if(j===0) img+=((Math.floor(i/2))+"  |");
-// 					else{
-// 						const content = board[rowColToIndex(board,Math.floor(i/2)-1,j-1)];
-// 						if(!(content===" ")) img+=(" "+content+" |");
-// 						else img+="   |";
-// 					}
-// 				}
-// 			}else{
-// 				if(j===0) img+="   +";
-// 				else img+="---+";
-// 			}
-// 		}
-// 		img+="\n";
-//
-// 	}
-// 	return img;
-// }
+//const moves = getCellsToFlip(board, 3,3);
+const moves = getCellsToFlip(board, 2, 3);
+console.log(moves);

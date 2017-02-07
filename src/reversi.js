@@ -37,7 +37,7 @@ function indexToRowCol(board ,i){
     columns = (newIndex - boardLength*rows)-1;
   }else columns = i;
   //columns = (newIndex - (boardLength*Math.floor(newIndex/(boardLength))))-1;
-  const info = {row: rows ,col: columns};
+  const info = {"row": rows ,"col": columns};
   return info;
 }
 
@@ -75,7 +75,7 @@ function algebraicToRowCol(algebraicNotation){
     number = arr.slice(1);
     for(let i=0;i<number.length;i++){
       if(isNaN(number[i]) || number[i]===" "){
-        console.log(number[i])
+        //console.log(number[i])
         return undefined;
       }
     }
@@ -163,7 +163,7 @@ function boardToString(board){
     }
     line+= "\n";
   }
-  console.log(line);
+  //console.log(line);
   return line;
 }
 
@@ -189,9 +189,9 @@ function flipCells(board, cellsToFlip){
   let info = arguments[1];
   let arrRows = info[0];
   let arrColumns = info[1];
-  console.log(info);
-  console.log(arrRows);
-  console.log(arrColumns);
+  // console.log(info);
+  // console.log(arrRows);
+  // console.log(arrColumns);
   // console.log(arrRows.length);
   // console.log(arrColumns.length);
   if(Array.isArray(info[0][0])){
@@ -211,8 +211,109 @@ function flipCells(board, cellsToFlip){
 
   return board;
 }
+//use this function for Get Cells to Flip to help convert the index Arrays
+function convertIndexArrayTolocation(board, arrIndex){
+  const newArr = [];
+  if(arrIndex[0]==="valid"){
+    for(let i= 1; i<arrIndex.length; i++){
+      let info = indexToRowCol(board, arrIndex[i]);
+      let row = info["row"];
+      let col = info["col"];
+      newArr.push([row,col]);
+    }
+    //console.log(newArr);
+    return newArr;
+  }else return newArr;
+}
 
 function getCellsToFlip(board, lastRow, lastCol){
+  const index = rowColToIndex(board, lastRow,lastCol);
+  const boardLength = Math.sqrt(board.length);
+  const lastLetterPlaced = board[index];
+  let oppositeLetter;
+  if(lastLetterPlaced === "X"){
+    oppositeLetter = "O";
+  }else{
+    oppositeLetter = "X";
+  }
+  const arrRowsRightIndex = [];
+  const arrRowsLeftIndex = [];
+  const arrColUpIndex =[]
+  const arrColDownIndex = [];
+
+
+  //checking right row from last move
+  for(let i=lastCol+1; i<boardLength;i++){
+    let curIndex = rowColToIndex(board, lastRow, i)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrRowsRightIndex.push(curindex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrRowsRightIndex.unshift("valid");
+      break;
+    }
+  }
+//  console.log(arrRowsRightIndex);
+
+  //checking left row from last more
+  for(let i=lastCol-1; i>=0;i-- ){
+    let curIndex = rowColToIndex(board, lastRow, i)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      //console.log(curIndex);
+      arrRowsLeftIndex.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrRowsLeftIndex.unshift("valid");
+      break;
+    }
+  }
+  //console.log(arrRowsLeftIndex);
+
+  //checking up column from last more
+  for(let i=lastRow-1; i>=0;i-- ){
+    let curIndex = rowColToIndex(board, i, lastCol)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrColUpIndex.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrColUpIndex.unshift("valid");
+      break;
+    }
+  }
+//
+  //checking down column from last move
+  for(let i=lastRow+1; i>boardLength;i++ ){
+    let curIndex = rowColToIndex(board, i, lastCol)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrColDownIndex.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrColDownIndex.unshift("valid");
+      break;
+    }
+  }
+//  console.log(arrColDownIndex);
+  // console.log(arrColUpIndex);
+  // console.log(arrRowsLeftIndex);
+
+  let arrRows = convertIndexArrayTolocation(board, arrRowsRightIndex).concat(convertIndexArrayTolocation(board,arrRowsLeftIndex));
+  let arrCols = convertIndexArrayTolocation(board, arrColDownIndex).concat(convertIndexArrayTolocation(board, arrColUpIndex));
+  //console.log(arrRows);
+  //console.log(arrCols);
+  let arrFinal =[];
+  if(arrRows.length >0){
+    arrFinal.push(arrRows);
+  }
+  if(arrCols.length >0){
+    arrFinal.push(arrCols);  
+  }
+  //console.log(arrFinal);
+
+  return arrFinal;
 
 }
 
