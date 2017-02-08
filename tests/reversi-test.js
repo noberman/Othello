@@ -182,6 +182,13 @@ describe('reversi', function() {
             board = rev.placeLetter(board, 'O', "A2");
             expect(rev.isValidMove(board, 'X', 2, 0)).to.be.true;
         });
+        it('return true if move is played into empty cell and would flip 2 cells diagonally to lower right', function() {
+          let board = rev.generateBoard(4,4, " ");
+          board = rev.placeLetter(board, "X", "A1");
+          board = rev.placeLetters(board, "O", "B2", "C3");
+          expect(rev.isValidMove(board, "X", 3,3)).to.be.true;
+        });
+
         it('returns false if move does not flip at least one of the other player\'s pieces', function() {
             let board = rev.generateBoard(3, 3, " ");
             board = rev.placeLetter(board, 'X', "B1");
@@ -242,8 +249,8 @@ describe('reversi', function() {
         });
         it('returns an empty list if no valid moves are available for board and letter', function() {
             let board = rev.generateBoard(4, 4, " ");
-            board = rev.placeLetters(board, 'O', 'A1', 'C1', 'A2', 'C2');
-            board = rev.placeLetters(board, 'X', 'B2', 'C2', 'B3', 'C3', 'C4');
+            board = rev.placeLetters(board, 'O', 'A1', 'C1', 'A2');
+            board = rev.placeLetters(board, 'X', 'B2', 'B3', 'C3', 'C4');
             const res = rev.getValidMoves(board, 'X');
             // expect(res).to.deep.equal([[2, 0]]);
             expect(res).to.deep.equal([]);
@@ -326,10 +333,7 @@ describe('reversi', function() {
             expect(counts['O']).to.equal(1);
         });
 
-        it('returns false if move is out of bounds', function() {
-            const board = rev.generateBoard(3, 3, " ");
-            expect(rev.isValidMoveAlgebraicNotation(board, 'X', 'D5')).to.be.false;
-        });
+
     });
 
 });

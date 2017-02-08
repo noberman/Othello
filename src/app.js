@@ -2,9 +2,11 @@
 const rev = require("./reversi.js");
 
 let makeBoard = rev.generateBoard;
+//board = makeBoard(4,4);
 board = makeBoard(4,4);
 let flipCells = rev.flipCells;
-let stringBoard = rev.boardString;
+let stringBoard = rev.boardToString;
+let indexToRowCol = rev.indexToRowCol;
 // let setCell = rev.setBoardCell;
 // setCell(board, "X", 1,1);
 // let notation = rev.algebraicToRowCol;
@@ -14,6 +16,8 @@ let placeLetter = rev.placeLetter;
 let placeLetters = rev.placeLetters;
 let boardString = rev.boardToString;
 let getCellsToFlip = rev.getCellsToFlip;
+let isValidMove = rev.isValidMove;
+let getValidMoves = rev.getValidMoves;
 //placeLetter(board, "X", "B2");
 // placeLetter(board,"X","D1");
 // placeLetter(board,"X","A4");
@@ -22,10 +26,33 @@ let getCellsToFlip = rev.getCellsToFlip;
 // placeLetter(board,"O","B4");
 // placeLetter(board,"O","C4");
 // placeLetter(board, "X", "D4");
-placeLetters(board, 'O', 'B3', 'C3', 'D2');
-rev.placeLetters(board, 'X', 'A3', 'D1', 'D3');
+placeLetters(board, 'X', 'A1');
+placeLetters(board, 'O', 'B2', 'C3');
+//placeLetter(board, 'X', 'D4');
+
+//placeLetters(board, "O", "B2");
+//placeLetter(board, "X", "C3")
+//console.log(indexToRowCol(board, 0));
 //last move: C3 is [2,2]
 //board = flipCells(board, [[[0,1],[0,0]],[1,1]]);
 //const moves = getCellsToFlip(board, 3,3);
-const moves = getCellsToFlip(board, 2, 3);
-console.log(moves);
+//const moves = getCellsToFlip(board, 2, 2);
+//console.log(moves);
+//console.log(board);
+//for(let i = 0; i<board.length; i++){
+  //info = indexToRowCol(board,i);
+  //console.log(info);
+  //console.log(info["row"]+ " " + info["col"]);
+  //console.log(board);
+  //console.log(isValidMove(board,"X",0,2));
+//  console.log(board);
+
+  // rev.setBoardCell(board,"X", 0, 2);
+  // let arrOfAnswers = getCellsToFlip(board, 0, 2)
+  // //console.log(arrOfAnswers);
+  // rev.neutralizeCell(board, 0, 2);
+  // console.log(board);
+//}
+//console.log(isValidMove(board, "X", 2,0)+ "\n");
+console.log(stringBoard(board));
+//console.log(getValidMoves(board, "X"));

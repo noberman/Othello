@@ -25,18 +25,14 @@ function rowColToIndex(board, rowNumber, columnNumber){
 }
 
 function indexToRowCol(board ,i){
-  let rows, columns;
-  newIndex = i+1;
-  // if(i === 0){
-  //   const info = {row: 0 ,col: 0};
-  //   return info;
-  // }
   const boardLength = Math.sqrt(board.length);
-  rows = Math.ceil(i/(boardLength))-1;
-  if(rows>0){
-    columns = (newIndex - boardLength*rows)-1;
-  }else columns = i;
-  //columns = (newIndex - (boardLength*Math.floor(newIndex/(boardLength))))-1;
+  let rows, columns;
+  rows = Math.floor(i/(boardLength));
+
+  columns = i%boardLength;
+  // if(rows>0){
+  //   columns = (i - boardLength*rows)-1;
+  // }else columns = i;
   const info = {"row": rows ,"col": columns};
   return info;
 }
@@ -118,7 +114,7 @@ function boardToString(board){
    6:'G', 7:'H', 8:'I', 9:'J', 10:'K', 11:'L', 12:'M', 13:'N', 14:'O', 15:'P',
    16:'Q', 17:'R', 18:'S', 20:'T', 21:'U', 22:'V', 23:'X', 24:'Y', 25:'Z'};
    let line = "";
-  for(let i=0; i<=2*(boardLength+1); i++){
+  for(let i=0; i<2*(boardLength+1); i++){
     for(let j = 0; j<boardLength+1; j++){
       // if(i===1){
       //   //writing the first line A  B  C  D
@@ -185,6 +181,15 @@ function flip(board, row, col){
   return board;
 }
 
+function neutralizeCell(board, row, col){
+  let index = rowColToIndex(board, row, col)
+  //console.log(index);
+  //console.log(board[index]);
+  board[index]=" ";
+  //console.log(board);
+  return board;
+}
+
 function flipCells(board, cellsToFlip){
   let info = arguments[1];
   let arrRows = info[0];
@@ -241,6 +246,10 @@ function getCellsToFlip(board, lastRow, lastCol){
   const arrColUpIndex =[]
   const arrColDownIndex = [];
 
+  const arrDiagUpLeft = [];
+  const arrDiagUpRight = [];
+  const arrDiagDownLeft = [];
+  const arrDiagDownRight = [];
 
   //checking right row from last move
   for(let i=lastCol+1; i<boardLength;i++){
@@ -248,7 +257,7 @@ function getCellsToFlip(board, lastRow, lastCol){
     if(board[curIndex] === " "){
       break;
     }else if(board[curIndex] === oppositeLetter){
-      arrRowsRightIndex.push(curindex);
+      arrRowsRightIndex.push(curIndex);
     }else if(board[curIndex] === lastLetterPlaced){
       arrRowsRightIndex.unshift("valid");
       break;
@@ -296,41 +305,147 @@ function getCellsToFlip(board, lastRow, lastCol){
       break;
     }
   }
-//  console.log(arrColDownIndex);
-  // console.log(arrColUpIndex);
+
+  let i,j;
+  //checking diagonal up left
+  for(i=lastRow-1, j = lastCol-1; i>=0 && j>=0;i--,j-- ){
+    let curIndex = rowColToIndex(board, i, j)
+    // console.log("oppositeLetter: " + oppositeLetter);
+    // console.log("lastLetterPlaced: " + lastLetterPlaced);
+    // console.log(board[curIndex]);
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrDiagUpLeft.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrDiagUpLeft.unshift("valid");
+      break;
+    }
+  }
+  //checking for digonal up right
+  for( i=lastRow-1, j = lastCol+1; i>=0 && j<boardLength;i--,j++ ){
+    let curIndex = rowColToIndex(board, i, j)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrDiagUpRight.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrDiagUpRight.unshift("valid");
+      break;
+    }
+  }
+  //checking for diagonal down left
+  for( i=lastRow+1, j = lastCol-1; i<boardLength && j>=0;i++,j-- ){
+    let curIndex = rowColToIndex(board, i, j)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrDiagDownLeft.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrDiagDownLeft.unshift("valid");
+      break;
+    }
+  }
+  //checking for diagonal down right
+  for( i=lastRow+1, j = lastCol+1; i<boardLength && j<boardLength;i++,j++ ){
+    let curIndex = rowColToIndex(board, i, j)
+    if(board[curIndex] === " "){
+      break;
+    }else if(board[curIndex] === oppositeLetter){
+      arrDiagDownRight.push(curIndex);
+    }else if(board[curIndex] === lastLetterPlaced){
+      arrDiagDownRight.unshift("valid");
+      break;
+    }
+  }
+  // console.log(arrColDownIndex);
+  // console.log(convertIndexArrayTolocation(board, arrColUpIndex));
   // console.log(arrRowsLeftIndex);
+  // console.log(arrRowsRightIndex);
+
 
   let arrRows = convertIndexArrayTolocation(board, arrRowsRightIndex).concat(convertIndexArrayTolocation(board,arrRowsLeftIndex));
   let arrCols = convertIndexArrayTolocation(board, arrColDownIndex).concat(convertIndexArrayTolocation(board, arrColUpIndex));
   //console.log(arrRows);
   //console.log(arrCols);
+  let arrTopLeftToBottomRight = convertIndexArrayTolocation(board, arrDiagUpLeft).concat(convertIndexArrayTolocation(board, arrDiagDownRight));
+  let arrTopRightToBottomLeft =  convertIndexArrayTolocation(board, arrDiagUpRight).concat(convertIndexArrayTolocation(board, arrDiagDownLeft));
+
   let arrFinal =[];
+
   if(arrRows.length >0){
     arrFinal.push(arrRows);
   }
   if(arrCols.length >0){
-    arrFinal.push(arrCols);  
+    arrFinal.push(arrCols);
+  }
+  if(arrTopRightToBottomLeft.length > 0){
+    arrFinal.push(arrTopRightToBottomLeft);
+  }
+  if(arrTopLeftToBottomRight.length >0){
+    arrFinal.push(arrTopLeftToBottomRight);
   }
   //console.log(arrFinal);
-
+  // console.log(arrFinal == []);
+  // console.log(Array.isArray([]));
+  // console.log(Array.isArray(arrFinal));
   return arrFinal;
 
 }
 
 function isValidMove(board, letter, row, col){
-
+  let index = rowColToIndex(board, row, col);
+  let cellContent = board[index];
+  let arrOfAnswers;
+  if(cellContent === " "){
+    setBoardCell(board,letter, row, col);
+    arrOfAnswers = getCellsToFlip(board, row, col)
+    //console.log(arrOfAnswers);
+    board = neutralizeCell(board, row, col);
+    if(arrOfAnswers.length > 0){
+      return true;
+    }return false;
+  }else{
+    return false;
+  }
 }
 
 function isValidMoveAlgebraicNotation(board, letter, algebraicNotation){
-
+  let info = algebraicToRowCol(algebraicNotation);
+  return isValidMove(board, letter, info["row"],info["col"]);
 }
 
 function getLetterCounts(board){
-
+  let xCount = 0;
+  let oCount = 0;
+  for(let i =0; i<board.length; i++){
+    if(board[i] === "X"){
+      xCount++;
+    }else if (board[i]==="O"){
+      oCount++;
+    }
+  }
+  const counts = {"X":xCount, "O":oCount};
+  return counts;
 }
 
 function getValidMoves(board, letter){
-
+  let arrMoves = [];
+  for(let i =0; i<=board.length; i++){
+    //console.log(board.length);
+    //console.log(i);
+    //console.log(board[i]);
+    if(board[i] === " "){
+      let info = indexToRowCol(board, i);
+      //console.log(info);
+      //console.log(isValidMove(board, letter, info["row"], info["col"]));
+      if(isValidMove(board, letter, info["row"], info["col"])){
+        arrMoves.push([info["row"],info["col"]]);
+      }
+    }else continue;
+    //console.log(isValidMove(board, letter, info["row"], info["col"]));
+  }
+  return arrMoves;
 }
 
 
@@ -352,4 +467,7 @@ module.exports = {
   isValidMoveAlgebraicNotation: isValidMoveAlgebraicNotation,
   getLetterCounts: getLetterCounts,
   getValidMoves: getValidMoves,
+  setBoardCell: setBoardCell,
+  neutralizeCell: neutralizeCell,
+
 }
