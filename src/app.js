@@ -26,17 +26,68 @@ if(process.argv[2]!==undefined){
      //console.log(data);
      let boardSettings = JSON.parse(data);
      let playerLetter = boardSettings['boardPreset']['playerLetter'];
-     let board = boardSettingsp['boardPreset']['board'];
-     let computer Letter;
+     let board = boardSettings['boardPreset']['board'];
+     let computerMoves = boardSettings["scriptedMoves"]["computer"];
+     let playerMoves = boardSettings["scriptedMoves"]["player"];
+     let computerLetter;
      if(playerLetter === "X"){
        ComputerLetter = "O";
      }else{
        ComputerLetter = "X";
      }
+     if(playerLetter === "X"){
+       humanTurn = true;
+     }else{
+       humanTurn = false;
+     }
+     while(playerMoves.length > 0 && computerMoves.length >0){
+       if(humanTurn){
+         if(playerMoves.length>0){
+           let curInfo = playerMoves.shift();
+           rev.placeLetter(board, playerLetter, curInfo);
+           //console.log(rev.boardToString(board));
 
-     
-   }
-  });
+           let info = rev.algebraicToRowCol(curInfo);
+           //console.log(info);
+           let cellsToFlip = rev.getCellsToFlip(board, info["row"], info["col"]);
+
+           for(let i=0; i<cellsToFlip.length; i++){
+             for(let j = 0; j<cellsToFlip[i].length; j++){
+               rev.flip(board,cellsToFlip[i][j][0], cellsToFlip[i][j][1]);
+             }
+           }
+          }
+          humanTurn = false;
+        }else{  //computer turn
+           if(computerMoves.length>0){
+             let curInfo = computerMoves.shift();
+             rev.placeLetter(board, ComputerLetter, curInfo);
+             //console.log(rev.boardToString(board));
+
+             let info = rev.algebraicToRowCol(curInfo);
+             //console.log(info);
+             let cellsToFlip = rev.getCellsToFlip(board, info["row"], info["col"]);
+
+             for(let i=0; i<cellsToFlip.length; i++){
+               for(let j = 0; j<cellsToFlip[i].length; j++){
+                 rev.flip(board,cellsToFlip[i][j][0], cellsToFlip[i][j][1]);
+                }
+              }
+            }
+            humanTurn = true;
+          }
+        }
+
+
+      //put printouts here
+      console.log(rev.boardToString(board));
+      console.log("Score ");
+      console.log("======");
+      //console.log(board);
+      let count = rev.getLetterCounts(board);
+      console.log("X:" + count["X"] + ", " + " O:" + count["O"]);
+    
+  }
 }
 
 
