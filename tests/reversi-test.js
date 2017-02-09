@@ -288,6 +288,15 @@ describe('reversi', function() {
             const res = rev.getValidMoves(board, 'X');
             expect(res).to.deep.include.members([[3, 3], [1, 2]]);
         });
+        it('returns multiple valid moves Noah\'s own test', function() {
+            let board = rev.generateBoard(4, 4, " ");
+            board = rev.placeLetters(board, 'X', 'C2');
+            board = rev.placeLetters(board, 'O', 'B2');
+            board = rev.placeLetters(board, 'X', 'B3');
+            board = rev.placeLetters(board, 'O', 'C3');
+            const res = rev.getValidMoves(board, 'X');
+            expect(res).to.deep.include.members([[0, 1], [1, 0], [2, 3], [3, 2]]);
+        });
     });
 
     describe('getCellsToFlip', function() {

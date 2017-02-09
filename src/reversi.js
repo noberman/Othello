@@ -52,8 +52,13 @@ function isLetter (c) {
 }
 
 function algebraicToRowCol (algebraicNotation) {
-  let arr = algebraicNotation.split ('');
-  // console.log (arr);
+  if(algebraicNotation===undefined){
+    return undefined;
+  }
+  //console.log(algebraicNotation);
+
+  let arr = [...algebraicNotation];
+  //console.log (arr);
   let letter, number;
   if (arr.length === 2) {
     // console.log (isLetter (arr[0]));
@@ -260,7 +265,7 @@ function getCellsToFlip (board, lastRow, lastCol) {
   }
 //   console.log (arrRowsRightIndex);
 
-  // checking left row from last more
+  // checking left row from last move
   for (let i = lastCol-1; i >= 0; i-- ) {
     let curIndex = rowColToIndex (board, lastRow, i)
     if (board[curIndex] === ' ') {
@@ -275,7 +280,20 @@ function getCellsToFlip (board, lastRow, lastCol) {
   }
   // console.log (arrRowsLeftIndex);
 
-  // checking up column from last more
+  // checking down column from last move
+  for (let i = lastRow+1; i < boardLength; i++ ) {
+    let curIndex = rowColToIndex (board, i, lastCol)
+    if (board[curIndex] === ' ') {
+      break;
+    } else if (board[curIndex] === oppositeLetter) {
+      arrColDownIndex.push (curIndex);
+    } else if (board[curIndex] === lastLetterPlaced) {
+      arrColDownIndex.unshift ('valid');
+      break;
+    }
+  }
+
+  // checking up column from last move
   for (let i=lastRow-1; i>=0; i-- ) {
     let curIndex = rowColToIndex (board, i, lastCol)
     if (board[curIndex] === ' ') {
@@ -287,19 +305,8 @@ function getCellsToFlip (board, lastRow, lastCol) {
       break;
     }
   }
-//
-  // checking down column from last move
-  for (let i = lastRow+1; i > boardLength; i++ ) {
-    let curIndex = rowColToIndex (board, i, lastCol)
-    if (board[curIndex] === ' ') {
-      break;
-    } else if (board[curIndex] === oppositeLetter) {
-      arrColDownIndex.push (curIndex);
-    } else if (board[curIndex] === lastLetterPlaced) {
-      arrColDownIndex.unshift ('valid');
-      break;
-    }
-  }
+
+
 
   let i, j;
   // checking diagonal up left
@@ -405,6 +412,9 @@ function isValidMove (board, letter, row, col) {
 
 function isValidMoveAlgebraicNotation (board, letter, algebraicNotation) {
   let info = algebraicToRowCol (algebraicNotation);
+  if (info === undefined){
+    return false;
+  }
   return isValidMove (board, letter, info['row'], info['col']);
 }
 
