@@ -306,8 +306,6 @@ function getCellsToFlip (board, lastRow, lastCol) {
     }
   }
 
-
-
   let i, j;
   // checking diagonal up left
   for (i = lastRow-1, j = lastCol-1; i >= 0 && j >= 0; i--, j-- ) {
